@@ -15,7 +15,22 @@ const app = express();
   to verify a ?token='some token' query param exists in a GET, POST req 
   - if there is no token throw an error
   */
+app.get("/ping", (req, res) => {
+  res.json("pong");
+});
 
-app.listen(3000, () => {
+function verifyMidware(req, res, next) {
+  console.log('Time:', Date.now())
+  if (req.query.token) {
+    next()
+  }
+  else {
+    throw Error("Nope")
+  }
+}
+
+app.use(verifyMidware)
+
+app.listen(4000, () => {
   console.log("Server is listening on port 3000....");
 });
